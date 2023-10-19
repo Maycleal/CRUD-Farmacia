@@ -1,27 +1,25 @@
 package com.generation.crudfarmacia.model;
 
-import java.util.List;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.UpdateTimestamp;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-        @Entity
-        @Table(name = "tb_categoria")
-        public class Categoria {
+@Entity
+@Table(name = "tb_produtos")
+public class Produtos {
 	
-
+		
 		@Id
 		@GeneratedValue(strategy = GenerationType.IDENTITY)
 		private Long id;
@@ -30,16 +28,14 @@ import jakarta.validation.constraints.Size;
 		@Size(min=3, max=100, message = "O atributo deve conter no mínimo 03 e no máximo 100 caracteres")
 		private String nome;
 		
-		@NotBlank(message = "O atributo descrição é obrigatório!")
-		@Size(min=2, max=200, message = "O atributo deve conter no mínimo 02 e no máximo 200 caracteres")
-		private String descricao;
+		private Double preco;
 		
 		@UpdateTimestamp
 		private LocalDateTime data;
 		
-		@OneToMany(fetch = FetchType.LAZY, mappedBy = "categoria", cascade = CascadeType.REMOVE)
-		@JsonIgnoreProperties("categoria")
-		private List<Produtos> produtos;
+		@ManyToOne
+		@JsonIgnoreProperties("produtos")
+		private Categoria categoria;
 
 		public Long getId() {
 			return id;
@@ -57,12 +53,13 @@ import jakarta.validation.constraints.Size;
 			this.nome = nome;
 		}
 
-		public String getDescricao() {
-			return descricao;
+		
+		public Double getPreco() {
+			return preco;
 		}
 
-		public void setDescricao(String descricao) {
-			this.descricao = descricao;
+		public void setPreco(Double preco) {
+			this.preco = preco;
 		}
 
 		public LocalDateTime getData() {
@@ -73,13 +70,14 @@ import jakarta.validation.constraints.Size;
 			this.data = data;
 		}
 
-		public List<Produtos> getProdutos() {
-			return produtos;
+		public Categoria getCategoria() {
+			return categoria;
 		}
 
-		public void setProdutos(List<Produtos> produtos) {
-			this.produtos = produtos;
+		public void setCategoria(Categoria categoria) {
+			this.categoria = categoria;
 		}
 
+		
+	}
 
-}

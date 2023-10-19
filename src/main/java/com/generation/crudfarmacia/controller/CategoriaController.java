@@ -18,78 +18,60 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-
 import com.generation.crudfarmacia.model.Categoria;
 import com.generation.crudfarmacia.repository.CategoriaRepository;
-
 
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/categoria")
-@CrossOrigin (origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CategoriaController {
 
 	@Autowired
 	private CategoriaRepository categoriaRepository;
-	
+
 	@GetMapping
-	public ResponseEntity <List<Categoria>> getAll() {
+	public ResponseEntity<List<Categoria>> getAll() {
 		return ResponseEntity.ok(categoriaRepository.findAll());
 	}
-	 @GetMapping("/{id}")
-     public ResponseEntity <Categoria> getById(@PathVariable Long id) {
-    	 return categoriaRepository.findById(id)
-    			 .map(resposta -> ResponseEntity.ok(resposta))
-    			 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
-    }
-	 @GetMapping("/nome/{nome}")
-     public ResponseEntity<List<Categoria>> getByNome(@PathVariable String nome){
-    	 return ResponseEntity.ok(categoriaRepository.findAllByNomeContainingIgnoreCase(nome));
-    }
-	 @PostMapping
-     public ResponseEntity<Categoria> post(@Valid @RequestBody Categoria categoria){
-    	//if (temaRepository.existsById(categoria.getTema().getId()))
-    	 return ResponseEntity.status(HttpStatus.CREATED)
-    			 .body(categoriaRepository.save(categoria));
-    	//throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tema não existe!", null);
-     } 
-	 
-	 @PutMapping
-     public ResponseEntity<Categoria> put(@Valid @RequestBody Categoria categoria) {
-    	  return categoriaRepository.findById(categoria.getId()) 
-    	          .map(resposta -> ResponseEntity.status(HttpStatus.OK)
-    			           .body(categoriaRepository.save(categoria)))
-    	          .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
-    	  }
-	 
-	 /* @PutMapping
-     public ResponseEntity<Categoria> put(@Valid @RequestBody Categoria categoria){
-    	  if (categoriaRepository.existsById(categoria.getId())) {
-    		  
-    		  if (temaRepository.existsById(categoria.getTema().getId()))
-    	          return ResponseEntity.status(HttpStatus.OK)
-    			 .body(categoriaRepository.save(categoria));
-    		  
-    		  throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Tema não existe!", null);
-    	  }
-    	  
-    	  return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-     }*/
 
+	@GetMapping("/{id}")
+	public ResponseEntity<Categoria> getById(@PathVariable Long id) {
+		return categoriaRepository.findById(id).map(resposta -> ResponseEntity.ok(resposta))
+				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+	}
 
-@ResponseStatus(HttpStatus.NO_CONTENT)
-@DeleteMapping("/{id}")
-public void delete(@PathVariable Long id) {
-	  Optional<Categoria> categoria = categoriaRepository.findById(id);
-	  
-	  if(categoria.isEmpty())
-		  throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-	  
-	  categoriaRepository.deleteById(id);
-	  
+	@GetMapping("/nome/{nome}")
+	public ResponseEntity<List<Categoria>> getByNome(@PathVariable String nome) {
+		return ResponseEntity.ok(categoriaRepository.findAllByNomeContainingIgnoreCase(nome));
+	}
+
+	@PostMapping
+	public ResponseEntity<Categoria> post(@Valid @RequestBody Categoria categoria) {
+		// if (temaRepository.existsById(categoria.getTema().getId()))
+		return ResponseEntity.status(HttpStatus.CREATED).body(categoriaRepository.save(categoria));
+		// throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tema não existe!",
+		// null);
+	}
+
+	@PutMapping
+	public ResponseEntity<Categoria> put(@Valid @RequestBody Categoria categoria) {
+		return categoriaRepository.findById(categoria.getId())
+				.map(resposta -> ResponseEntity.status(HttpStatus.OK).body(categoriaRepository.save(categoria)))
+				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+	}
+
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@DeleteMapping("/{id}")
+	public void delete(@PathVariable Long id) {
+		Optional<Categoria> categoria = categoriaRepository.findById(id);
+
+		if (categoria.isEmpty())
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+		categoriaRepository.deleteById(id);
+
+	}
+
 }
-	 
-	 
-	 }
-
