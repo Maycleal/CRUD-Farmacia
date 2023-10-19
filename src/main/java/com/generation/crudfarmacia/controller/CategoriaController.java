@@ -63,7 +63,7 @@ public class CategoriaController {
     	          .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     	  }
 	 
-	/* @PutMapping
+	 /* @PutMapping
      public ResponseEntity<Categoria> put(@Valid @RequestBody Categoria categoria){
     	  if (categoriaRepository.existsById(categoria.getId())) {
     		  
